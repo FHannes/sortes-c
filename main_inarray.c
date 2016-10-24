@@ -1,5 +1,5 @@
 /**
- * This implementation of the SORTES C language fluency assigment implements malloc() and free(),
+ * This implementation of the SORTES C language fluency assignment implements malloc() and free(),
  * using no memory space beyond that provided by the workarea array.
  */
 
