@@ -6,4 +6,4 @@ This repository contains my implementation of the C language fluency assignment 
 Assignment
 ----------
 
-The goal of the assignment was to implement a `malloc()` and `free()` function which managed a 1MiB block of memory with using the C implementations of `malloc()` and `free()` themselves.
+The goal of the assignment was to implement `malloc()` and `free()` functions which manage a 1MiB block of memory without using the C implementations of `malloc()` and `free()` themselves.
