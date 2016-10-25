@@ -1,4 +1,6 @@
-
+/**
+ * This implementation of the SORTES C language fluency assignment implements malloc() and free().
+ */
 
 #include <stdio.h>
 #ifndef size_t
@@ -121,7 +123,7 @@ void free2(void* mem) {
                 chunk->next = null;
                 chunk->in_use = 0;
             }
-            
+
             return;
         }
         previous = chunk;
