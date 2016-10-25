@@ -1,7 +1,12 @@
-CC=gcc -ansi -std=c99 -I.
+CC = gcc
 
-inarray: main_inarray.c
-	gcc -o main_inarray main_inarray.c
+all: main main_inarray
+
+main: src/main.c
+	$(CC) -o main src/main.c
+
+main_inarray: src/main.c
+	$(CC) -o main_inarray src/main_inarray.c
 
 clean:
-	rm -f main_inarray
+	rm -f main_inarray src/*.o
