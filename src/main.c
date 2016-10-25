@@ -56,6 +56,7 @@ void init() {
 
 void* malloc2(size_t size) {
     for (memory_chunk* chunk = chunks; chunk != null; chunk = chunk->next) {
+        // Find the first unallocated chunk with sufficient memory space
         if (!chunk->allocated && chunk->size >= size) {
             if (chunk->size == size) {
                 // The free chunk is a perfect match!
@@ -77,12 +78,14 @@ void* malloc2(size_t size) {
                     return null;
                 }
 
+                // Create a new chunk to handle the remaining memory of the old chunk which was not allocated
                 new_chunk->next = chunk->next;
                 new_chunk->location = chunk->location + size;
                 new_chunk->size = chunk->size - size;
                 new_chunk->allocated = 0;
                 new_chunk->in_use = 1;
 
+                // Resize the old chunk and allocate it
                 chunk->next = new_chunk;
                 chunk->size = size;
                 chunk->allocated = 1;
@@ -97,9 +100,12 @@ void* malloc2(size_t size) {
 void free2(void* mem) {
     memory_chunk* previous = null;
     for (memory_chunk* chunk = chunks; chunk != null; chunk = chunk->next) {
+        // Find the chunk which starts at the given memory pointer
         if (chunk->location == mem) {
+            // Release memory allocation
             chunk->allocated = 0;
 
+            // Merge with next chunk if it also free memory
             memory_chunk* next = chunk->next;
             if (next != null && next->allocated == 0) {
                 chunk->next = next->next;
@@ -108,12 +114,14 @@ void free2(void* mem) {
                 next->in_use = 0;
             }
 
+            // Merge with previous chunk if it also free memory
             if (previous != null && previous->allocated == 0) {
                 previous->next = chunk->next;
                 previous->size += chunk->size;
                 chunk->next = null;
                 chunk->in_use = 0;
             }
+            
             return;
         }
         previous = chunk;
