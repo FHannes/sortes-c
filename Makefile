@@ -1,4 +1,4 @@
-CC = gcc
+CC = gcc -std=c99
 
 all: main main_inarray
 
