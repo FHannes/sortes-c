@@ -6,10 +6,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Number of bytes per chunk of document stored
+#define DATA_SIZE 64
+
 typedef enum { false = 0, true } bool;
 
 typedef struct bucket_type {
-    char data[64];
+    char data[DATA_SIZE];
     char length;
     struct bucket_type* next;
 } bucket;
@@ -46,9 +49,9 @@ int savetext(char* text, bucket** anchor, bucket** freelist) {
     
     int total = 0;
     if (*anchor != NULL) {
-        while ((*anchor)->length == 64 && (*anchor)->next != NULL) {
+        while ((*anchor)->length == DATA_SIZE && (*anchor)->next != NULL) {
             (*anchor) = (*anchor)->next;
-            total += 64;
+            total += DATA_SIZE;
         }
         total += (*anchor)->length;
     }
@@ -61,7 +64,7 @@ int savetext(char* text, bucket** anchor, bucket** freelist) {
 
     bucket* list = *anchor;
     while (length > 0) {
-        if (list == NULL || list->length == 64) {
+        if (list == NULL || list->length == DATA_SIZE) {
             bucket* new;
             if (freelist != NULL && *freelist != NULL) {
                 new = *freelist;
@@ -81,7 +84,7 @@ int savetext(char* text, bucket** anchor, bucket** freelist) {
             list = new;
         }
 
-        int remaining = 64 - list->length;
+        int remaining = DATA_SIZE - list->length;
         int amount = (length > remaining ? remaining : length);
         strncpy(&list->data[list->length], text, amount);
         list->length += amount;
