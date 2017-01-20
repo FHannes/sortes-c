@@ -59,8 +59,9 @@ int savetext(char* text, bucket** anchor, bucket** freelist) {
         return total;
     }
 
+    bucket* list = *anchor;
     while (length > 0) {
-        if (*anchor == NULL || (*anchor)->length == 64) {
+        if (list == NULL || list->length == 64) {
             bucket* new;
             if (freelist != NULL && *freelist != NULL) {
                 new = *freelist;
@@ -72,16 +73,18 @@ int savetext(char* text, bucket** anchor, bucket** freelist) {
             } else if (!alloc_bucket(&new)) {
                 return -1;
             }
-            if (*anchor != NULL) {
-                (*anchor)->next = new;
+            if (list != NULL) {
+                list->next = new;
+            } else {
+                *anchor = new;
             }
-            (*anchor) = new;
+            list = new;
         }
 
-        int remaining = 64 - (*anchor)->length;
+        int remaining = 64 - list->length;
         int amount = (length > remaining ? remaining : length);
-        strncpy(&(*anchor)->data[(*anchor)->length], text, amount);
-        (*anchor)->length += amount;
+        strncpy(&list->data[list->length], text, amount);
+        list->length += amount;
         text += amount;
         length -= amount;
 
@@ -212,6 +215,11 @@ int main() {
         printf("Error in savetext\n");
         return 0;
     }
+    if (savetext("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", &doclist, &freelist) == -1) {
+        // b is the 65th character
+        printf("Error in savetext\n");
+        return 0;
+    }
 
     char* doc = readdoc(doclist);
     if (doc == (char*) -1) {
@@ -238,6 +246,11 @@ int main() {
         return 0;
     }
     if (savetext("world!", &doclist, &freelist) == -1) {
+        printf("Error in savetext\n");
+        return 0;
+    }
+    if (savetext("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", &doclist, &freelist) == -1) {
+        // b is the 65th character
         printf("Error in savetext\n");
         return 0;
     }
