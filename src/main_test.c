@@ -202,7 +202,7 @@ int main() {
     bucket* doclist = NULL;
     bucket* freelist = NULL;
 
-    printf("===== RUN 1 =====");
+    printf("========= RUN 1 =========\n");
 
     if (savetext("Hello ", &doclist, &freelist) == -1) {
         printf("Error in savetext\n");
@@ -231,7 +231,7 @@ int main() {
     printf("doc %p | free %p\n", doclist, freelist);
     free(doc);
 
-    printf("===== RUN 2 =====");
+    printf("\n========= RUN 2 =========\n");
 
     if (savetext("Hello ", &doclist, &freelist) == -1) {
         printf("Error in savetext\n");
